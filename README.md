@@ -88,18 +88,23 @@ Os dados são fictícios. Os prazos das bolsas são calculados a partir da data 
 6. Volta à **Ana** e avalia a mentoria.
 7. Entra como **SuperAdmin**: aprova o Paulo, altera o tempo médio do passaporte e mostra que as datas dos estudantes são recalculadas.
 
-## Estrutura do backend (MVC simples)
+## Estrutura do backend (arquitetura em camadas)
 
 ```
 backend/src/main/java/ao/ajsv/bolsas/
-├── model/        Entidades JPA e enums
-├── dto/          Objetos de pedido e resposta (records)
-├── repository/   Interfaces JpaRepository
-├── controller/   Controllers REST com as rotas
+├── controller/   Recebe o pedido HTTP e chama o service (sem regras de negócio)
+├── service/      Regras de negócio e validações
+├── repository/   Acesso à base de dados (interfaces JpaRepository)
+├── model/        Entidades JPA (tabelas) e enums
+├── dto/          Objetos de pedido e resposta em JSON (records)
 └── config/       CORS para o React
 ```
 
-Não há camada de serviço: os controllers usam os repositories diretamente.
+Fluxo de um pedido: `React → Controller → Service → Repository → PostgreSQL`.
+
+Cada controller tem o seu service com o mesmo nome (`AuthController` → `AuthService`, `EstudanteController` → `EstudanteService`, …).
+A funcionalidade principal, o calendário de documentos, está isolada no `CalendarioService`, que é usado pelo `EstudanteService` e pelo `AdminService`.
+Os métodos que gravam dados têm `@Transactional`: ou grava tudo, ou não grava nada.
 
 ### Entidades
 
