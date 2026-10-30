@@ -18,6 +18,7 @@ export function useDados(carregar, dependencias = []) {
     try {
       setDados(await carregar());
     } catch (e) {
+      console.error('Erro ao carregar dados:', e);
       setErro(mensagemErro(e));
     } finally {
       setACarregar(false);

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { api } from '../../api.js';
 import Aviso from '../../components/Aviso.jsx';
-import Carregando from '../../components/Carregando.jsx';
+import CarregandoBolsas from '../../components/CarregandoBolsas.jsx';
 import CartaoBolsa from '../../components/CartaoBolsa.jsx';
 import EstadoVazio from '../../components/EstadoVazio.jsx';
 import Icone from '../../components/Icone.jsx';
@@ -25,7 +25,7 @@ export default function Bolsas() {
 
   // Bolsas: voltam a carregar sempre que os filtros mudam
   const chave = parametros.toString();
-  const { dados: bolsas, erro, aCarregar } = useDados(() => {
+  const { dados: bolsas, erro, aCarregar, recarregar } = useDados(() => {
     const params = {};
     CAMPOS.forEach((c) => parametros.get(c) && (params[c] = parametros.get(c)));
     return api.get('/bolsas', { params }).then((r) => r.data);
@@ -108,7 +108,7 @@ export default function Bolsas() {
       <section className="contentor py-10">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-slate-600">
-            {bolsas && !aCarregar && (
+            {bolsas && !aCarregar && !erro && (
               <><strong className="text-azul">{bolsas.length}</strong> {bolsas.length === 1 ? 'bolsa encontrada' : 'bolsas encontradas'}</>
             )}
           </p>
@@ -119,14 +119,19 @@ export default function Bolsas() {
           )}
         </div>
 
-        <Aviso tipo="erro">{erro}</Aviso>
-        {aCarregar && <Carregando />}
-        {!aCarregar && bolsas?.length === 0 && (
+        {!aCarregar && erro && (
+          <Aviso tipo="erro" titulo="De momento não conseguimos carregar as bolsas." className="items-center justify-between">
+            <p>Tenta novamente dentro de momentos.</p>
+            <button type="button" className="btn-perigo mt-3" onClick={recarregar}>Tentar novamente</button>
+          </Aviso>
+        )}
+        {aCarregar && <CarregandoBolsas />}
+        {!aCarregar && !erro && bolsas?.length === 0 && (
           <EstadoVazio icone="pesquisa" titulo="Nenhuma bolsa encontrada">
             Experimenta outra pesquisa ou limpa os filtros.
           </EstadoVazio>
         )}
-        {!aCarregar && bolsas?.length > 0 && (
+        {!aCarregar && !erro && bolsas?.length > 0 && (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {bolsas.map((b) => <CartaoBolsa key={b.id} bolsa={b} />)}
           </div>

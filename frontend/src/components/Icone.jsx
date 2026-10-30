@@ -34,6 +34,7 @@ const CAMINHOS = {
   ligacao: <path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1" />,
   convite: (<><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6M17 3l2 2" /></>),
   estrela: <path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z" />,
+  bandeira: <path d="M5 21V5m0 0c4-3 7 3 11 0l3-1v11l-3 1c-4 3-7-3-11 0" />,
   mensagem: <path d="M4 5h16v11H9l-5 4V5z" />,
   olho: (<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></>),
 };
