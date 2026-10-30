@@ -29,9 +29,9 @@ export default function CalendarioBolsa({
   const proximos = c.documentos.filter((d) => d.estado !== 'CONCLUIDO' && d.alerta === 'PROXIMO').length;
 
   return (
-    <section className="cartao overflow-hidden">
+    <section className="cartao">
       {/* ---------- Cabeçalho */}
-      <header className="border-b border-slate-100 bg-gradient-to-r from-claro/70 to-white px-5 py-4">
+      <header className="rounded-t-2xl border-b border-slate-100 bg-gradient-to-r from-claro/70 to-white px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -71,10 +71,10 @@ export default function CalendarioBolsa({
       </header>
 
       {/* ---------- Corpo: alerta + linha do tempo */}
-      <div className={`grid gap-5 p-5 ${c.temAlerta ? 'xl:grid-cols-[minmax(0,1fr)_300px]' : ''}`}>
+      <div className={`grid items-start gap-5 p-5 ${c.temAlerta ? 'xl:grid-cols-[minmax(0,1fr)_300px]' : ''}`}>
         {c.temAlerta && (
-          <aside className="xl:order-2">
-            <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 xl:sticky xl:top-24">
+          <aside className="xl:order-2 xl:sticky xl:top-24 xl:self-start">
+            <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
               <div className="flex items-start gap-2 text-orange-800">
                 <Icone nome="alerta" className="mt-0.5 h-5 w-5 shrink-0" />
                 <div>
@@ -100,6 +100,7 @@ export default function CalendarioBolsa({
                         </div>
                       </div>
                       <div className="mt-2 flex items-center justify-between gap-2">
+                        <span className="font-titulo text-lg font-bold text-verde">{formatarKz(m.preco)}</span>
                         <span className="leading-tight">
   <span className="block text-base font-semibold text-verde">{formatarKz(m.preco)}</span>
   <span className="block text-xs text-slate-500">por sessão</span>

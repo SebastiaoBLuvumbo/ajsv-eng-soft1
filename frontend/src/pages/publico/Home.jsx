@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../api.js';
 import Aviso from '../../components/Aviso.jsx';
 import CalendarioBolsa from '../../components/CalendarioBolsa.jsx';
+import CarregandoBolsas from '../../components/CarregandoBolsas.jsx';
 import { EsqueletoCartao } from '../../components/Carregando.jsx';
 import CartaoBolsa from '../../components/CartaoBolsa.jsx';
 import EstadoVazio from '../../components/EstadoVazio.jsx';
@@ -77,6 +78,8 @@ export default function Home() {
   const entrada = useEntrada();
   const [pesquisa, setPesquisa] = useState('');
   const exemplo = useMemo(calendarioExemplo, []);
+  const { dados: destaques, erro, aCarregar, recarregar } = useDados(() => api.get('/bolsas/destaque').then((r) => r.data));
+
   const progresso = Math.round((exemplo.concluidos / exemplo.documentos.length) * 100);
 const mentorExemplo = exemplo.mentoresSugeridos[0];
   const { dados: destaques, erro, aCarregar, recarregar } = useDados(() => api.get('/bolsas/destaque').then((r) => r.data));
@@ -189,6 +192,13 @@ const mentorExemplo = exemplo.mentoresSugeridos[0];
               Em Angola, tratar um passaporte ou legalizar um certificado pode demorar semanas.
               Quando segues uma bolsa, calculamos a data limite para começares cada documento:
             </p>
+            <p className="mt-4 rounded-xl bg-claro px-4 py-3 font-titulo font-semibold text-azul">
+              <span className="text-verde-escuro">data para começar</span>
+              <span className="text-slate-500"> = </span>
+              <span className="text-azul">prazo da bolsa</span>
+              <span className="text-slate-500"> − </span>
+              <span className="text-azul">tempo médio do documento</span>
+            </p>
             <p className="mt-4 rounded-xl bg-claro px-4 py-3 font-titulo text-azul">
   <span className="font-semibold text-verde-escuro">data para começar</span>{' '}
   <span className="text-slate-500">=</span>{' '}
@@ -201,6 +211,7 @@ const mentorExemplo = exemplo.mentoresSugeridos[0];
               <li className="flex items-center gap-3"><span className="h-3 w-3 rounded-full bg-orange-400" />Próximo: começa nos próximos 14 dias</li>
               <li className="flex items-center gap-3"><span className="h-3 w-3 rounded-full bg-azul" />Dentro do prazo</li>
               <li className="flex items-center gap-3"><span className="h-3 w-3 rounded-full bg-verde" />Concluído</li>
+              <li className="flex items-center gap-3"><Icone nome="bandeira" className="h-4 w-4 text-dourado-escuro" />Prazo final da bolsa</li>
               <li className="flex items-center gap-3">
   <span className="flex h-3 w-3 items-center justify-center"><Icone nome="trofeu" className="h-4 w-4 shrink-0 text-dourado" /></span>
   Prazo final da bolsa
@@ -219,6 +230,21 @@ const mentorExemplo = exemplo.mentoresSugeridos[0];
           <p className="mt-3 text-slate-600">Três passos para chegares ao prazo final com tudo pronto.</p>
         </div>
         <ol className="mt-10 grid gap-5 md:grid-cols-3">
+          {PASSOS.map((p, i) => (
+            <li key={p.titulo} className="cartao relative flex flex-col items-start p-5">
+              <span aria-hidden="true" className="absolute right-5 top-4 font-titulo text-5xl font-bold text-azul/30">{i + 1}</span>
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-verde text-white">
+                <Icone nome={p.icone} className="h-6 w-6" />
+              </span>
+              <h3 className="mt-4 text-xl font-semibold">{p.titulo}</h3>
+              <p className="mt-2 text-slate-600">{p.texto}</p>
+              {i === 0 && (
+                <Link to="/bolsas" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-azul hover:underline">
+                  Ver bolsas <Icone nome="seta" className="h-4 w-4" />
+                </Link>
+              )}
+            </li>
+          ))}
       {PASSOS.map((p, i) => (
   <li
     key={p.titulo}
@@ -241,7 +267,7 @@ const mentorExemplo = exemplo.mentoresSugeridos[0];
       </section>
 
       {/* ---------------- Bolsas em destaque */}
-      <section className="bg-claro/60 py-16">
+      <section className="bg-claro/80 py-16">
         <div className="contentor">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -254,6 +280,20 @@ const mentorExemplo = exemplo.mentoresSugeridos[0];
           </div>
 
           <div className="mt-8">
+            {aCarregar && <CarregandoBolsas />}
+            {!aCarregar && erro && (
+              <Aviso tipo="erro" titulo="De momento não conseguimos carregar as bolsas." className="items-center justify-between">
+                <p>Tenta novamente dentro de momentos.</p>
+                <button type="button" className="btn-perigo mt-3" onClick={recarregar}>Tentar novamente</button>
+              </Aviso>
+            )}
+            {!erro && destaques && destaques.length === 0 && <p className="text-slate-500">Não há bolsas em destaque neste momento.</p>}
+            {!erro && destaques && destaques.length > 0 && (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {destaques.map((b) => <CartaoBolsa key={b.id} bolsa={b} />)}
+              </div>
+            )}
+          </div>
   {aCarregar && (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" role="status" aria-label="A carregar bolsas">
       {[1, 2, 3].map((n) => <EsqueletoCartao key={n} />)}
