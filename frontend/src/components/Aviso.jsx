@@ -11,19 +11,20 @@ const ESTILOS = {
   atencao: { caixa: 'border-orange-200 bg-orange-50 text-orange-800', icone: 'relogio' },
 };
 
-export default function Aviso({ tipo = 'info', titulo, children, className = '' }) {
+export default function Aviso({ tipo = 'info', titulo, children, acao, className = '' }) {
   if (!children && !titulo) return null;
   const estilo = ESTILOS[tipo] ?? ESTILOS.info;
   return (
     <div
       role={tipo === 'erro' ? 'alert' : 'status'}
-      className={`flex gap-3 rounded-xl border px-4 py-3 text-[15px] ${estilo.caixa} ${className}`}
+      className={`flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 text-[15px] ${estilo.caixa} ${className}`}
     >
-      <Icone nome={estilo.icone} className="mt-0.5 h-5 w-5 shrink-0" />
-      <div className="min-w-0">
+      <Icone nome={estilo.icone} className="h-5 w-5 shrink-0 self-start" />
+      <div className="min-w-0 flex-1">
         {titulo && <p className="font-semibold">{titulo}</p>}
         {children && <div>{children}</div>}
       </div>
+      {acao && <div className="shrink-0">{acao}</div>}
     </div>
   );
 }

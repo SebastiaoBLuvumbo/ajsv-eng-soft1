@@ -100,7 +100,10 @@ export default function CalendarioBolsa({
                         </div>
                       </div>
                       <div className="mt-2 flex items-center justify-between gap-2">
-                        <span className="text-sm font-semibold text-verde">{formatarKz(m.preco)}</span>
+                        <span className="leading-tight">
+  <span className="block text-base font-semibold text-verde">{formatarKz(m.preco)}</span>
+  <span className="block text-xs text-slate-500">por sessão</span>
+</span>
                         {onFalarMentor ? (
                           <button type="button" className="btn-secundario btn-sm" onClick={() => onFalarMentor(m, c.bolsaId)}>
                             <Icone nome="mensagem" className="h-4 w-4" /> Falar com o mentor

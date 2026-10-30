@@ -17,7 +17,9 @@ export const api = axios.create({
 export function mensagemErro(erro, alternativa = 'Ocorreu um erro inesperado. Tenta novamente.') {
   if (erro?.response?.data?.message) return erro.response.data.message;
   if (erro?.request && !erro?.response) {
-    return 'Não foi possível ligar ao servidor. Confirma que o backend está a correr em http://localhost:8080.';
+    console.error('Sem resposta do servidor:', erro); // detalhe técnico só na consola
+    return 'De momento não conseguimos ligar ao servidor. Tenta novamente daqui a pouco.';
   }
+  console.error('Erro inesperado:', erro);
   return alternativa;
 }
