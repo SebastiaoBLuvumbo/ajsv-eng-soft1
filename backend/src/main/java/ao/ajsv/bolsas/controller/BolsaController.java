@@ -5,7 +5,6 @@ import ao.ajsv.bolsas.model.Nivel;
 import ao.ajsv.bolsas.model.TipoBolsa;
 import ao.ajsv.bolsas.service.BolsaService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 

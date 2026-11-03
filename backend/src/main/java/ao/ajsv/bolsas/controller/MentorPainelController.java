@@ -3,7 +3,6 @@ package ao.ajsv.bolsas.controller;
 import ao.ajsv.bolsas.dto.*;
 import ao.ajsv.bolsas.service.MentorPainelService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /** Rotas do painel do mentor. {id} é o id do MENTOR (não do utilizador). As regras estão no {@link MentorPainelService}. */
