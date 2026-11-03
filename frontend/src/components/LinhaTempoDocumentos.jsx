@@ -79,37 +79,13 @@ export default function LinhaTempoDocumentos({ documentos = [], prazo, diasParaP
                     <span className={`h-2 w-2 shrink-0 rounded-full ${estilo.marcador}`} aria-hidden="true" />
                     <span>{textoEstadoDocumento(doc)}</span>
                   </span>
-              <p className={`font-semibold text-slate-800 ${concluido ? 'text-slate-500 line-through decoration-verde/70' : ''}`}>
-                {doc.nome}
-              </p>
-
-              {/* Urgência: uma só etiqueta (não aparece em documentos concluídos) */}
-              {!concluido && (
-                <div className="mt-2">
-                  <Etiqueta cor={estilo.etiqueta} className="!text-[13px]">
-                    {textoDiasDocumento(doc.diasRestantes)}
-                  </Etiqueta>
                 </div>
-              )}
+              </div>
 
-              <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
-                <span className="inline-flex items-center gap-1.5">
-                  <Icone nome="calendario" className="h-4 w-4 text-slate-400" />
-                  Começar até <strong className="font-semibold text-slate-800">{formatarData(doc.dataLimite)}</strong>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Icone nome="relogio" className="h-4 w-4 text-slate-400" />
-                  Demora em média{' '}
-                  <strong className="font-semibold text-slate-800">
-                    {doc.tempoMedioDias} {doc.tempoMedioDias === 1 ? 'dia' : 'dias'}
-                  </strong>
-                </span>
-              </p>
-
-              {/* Estado do documento: lista na área do estudante, etiqueta no resto */}
-              <div className="mt-3 flex items-center gap-2 text-sm">
-                <span className="text-slate-500">Estado:</span>
-                {editavel ? (
+              {/* Na área do estudante, permite mudar o estado */}
+              {editavel && (
+                <div className="mt-3 flex items-center gap-2 text-sm">
+                  <span className="text-slate-500">Estado:</span>
                   <select
                     value={doc.estado}
                     disabled={aMudar === doc.id}
@@ -121,12 +97,8 @@ export default function LinhaTempoDocumentos({ documentos = [], prazo, diasParaP
                       <option key={valor} value={valor}>{rotulo}</option>
                     ))}
                   </select>
-                ) : (
-                  <Etiqueta cor={concluido ? 'verde' : 'cinza'} className="!text-[13px]">
-                    {ESTADOS_DOCUMENTO[doc.estado]}
-                  </Etiqueta>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </li>
         );

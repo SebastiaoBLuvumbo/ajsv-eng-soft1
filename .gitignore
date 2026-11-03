@@ -1,2 +1,3 @@
-
 backend/arranque.log
+node_modules/
+dist/
